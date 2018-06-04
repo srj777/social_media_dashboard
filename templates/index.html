@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="isuara social">
+    <meta name="author" content="surjya">
+    <title>{% block title %}{% endblock %}- Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/metisMenu.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/sb-admin-2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/font-awesome.min.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/timeline.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/morris.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/jqcloud.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/leaflet.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('serveStaticResource', resource='css/mycss.css') }}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Life+Savers">    
+    
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 10px">
+            <div class="navbar-header"  >
+                <div class="row">
+                    <div class="col-lg-4">
+                        <a class="textlogo">iSuara</a>
+                    </div>
+                    
+                    <div class="col-lg-8">
+                        <div class="input-group custom-search-form" style="width:80%;margin-top:30px;float:right;">
+                            <input type="text" id="searchbox" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" id="search-button" type="button">
+                                <i class="fa fa-search"></i>
+							<button class="btn btn-default" id="stop-button" type="button">
+                                <i class="fa fa-stop"></i>
+                            </button>
+                            </span>
+                        </div>                    
+                    </div>
+                </div>
+                
+                <!-- <div class="input-group custom-search-form"> -->
+                
+            </div>
+            
+        </nav>
+        
+        <div id="wrapper">
+        <div  style="height:20px;margin-bottom:10px;">
+            <div id='status_message' style="width:80%;background-color:#f1ebc1;text-align: center;display:inline-block;">status message 
+            </div>
+            <div id='speed' style="width:19.5%;background-color:#dbfa99;text-align: center;display:inline-block;">29 ms</div>
+        </div>
+            
+
+        <div class="row">
+        <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-twitter fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge" id="twit-count">26</div>
+                        <div>New tweets!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+        <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-facebook fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge" id="post-count">12</div>
+                        <div>New Posts!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+        <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-instagram fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">124</div>
+                        <div>New Grams!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+        <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-google fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">13</div>
+                        <div>News !</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    </div>
+            <!-- /.row -->
+
+            <div class="row">
+            <div class="col-lg-3">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Five recent tweets
+                        
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <ul class="media-list" id='recent-tweets'>
+                            Now empty
+                        </ul>            
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+            <div class="col-lg-6">
+
+				<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Tweet Locations
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="mapid"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Word-Cloud
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id='wordcloud'></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Sentiment
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id='sentiment' style="display: block;margin: 0 auto;"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+                 
+            </div>
+            <div class="col-lg-3">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Top five influencers
+                        
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <ul class="media-list" id='influencers'>
+                            Now empty
+                        </ul>            
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+        </div>
+            <!-- /.row -->
+
+            
+        
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <div class="container">>
+                <ul class="flashes">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %} {% endwith %} {% block content %} {% endblock %}
+        </div>
+    </div>
+    {% block js %}
+    <script src="{{ url_for('serveStaticResource', resource='js/jquery.min.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/metisMenu.min.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/sb-admin-2.js')}}"></script>
+    
+    <script src="{{ url_for('serveStaticResource', resource='js/jqcloud.min.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/gcharts.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/leaflet.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/raphael-min.js')}}"></script>
+
+    <script src="{{ url_for('serveStaticResource', resource='js/socket.io.min.js')}}"></script>
+    <script src="{{ url_for('serveStaticResource', resource='js/rcv.js')}}"></script>
+    
+    
+
+    {% endblock %}
+</body>
+
+</html>
