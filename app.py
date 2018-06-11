@@ -28,10 +28,10 @@ tweet_collection_thread_event = threading.Event()
 tweet_count = 0
 
 #Variables that contains the user credentials to access Twitter API 
-access_token = "991597159031103488-SZOXhRg9D0ipefaxnPLWlEsr7TAqlLH"
-access_token_secret = "W5ENI5my2MzUZWNq7jBQmnyWXSZpBkbDpplI4uHtgVEjL"
-consumer_key = "Y7UYgVIAVn3ImmFbMcsFh8lV2"
-consumer_secret = "no6gWyv9NV7MWDsZlpz1n79EDqb3z4j5tHJfwwHRDOH3fjCtoV"
+access_token = "<use-yors>"
+access_token_secret = "<use-yors>"
+consumer_key = "<use-yors>"
+consumer_secret = "<use-yors>"
 
 def tokenize(s):
     return tokens_re.findall(s)
