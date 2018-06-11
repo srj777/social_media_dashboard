@@ -124,6 +124,7 @@ class TwitterClient(object):
         now = datetime.datetime.now()
         break_flag = False   
         global socketio
+        global tweet_collection_thread
         
         try:
         
@@ -205,10 +206,7 @@ class TwitterClient(object):
                     return None,None
                 else:
                     tweet_df = pd.DataFrame.from_records(tweets)
-                    print(min(tweet_df['tweet_date']))
-                    print(now - datetime.timedelta(days=self.age_days,hours=self.age_hours))
-                    if min(tweet_df['tweet_date']) <= (now - datetime.timedelta(days=self.age_days,hours=self.age_hours)):
-                        print('min date')                    
+                    if min(tweet_df['tweet_date']) <= (now - datetime.timedelta(days=self.age_days,hours=self.age_hours)):              
                         tweet_df = tweet_df[tweet_df['tweet_date'] > (now - datetime.timedelta(days=self.age_days,hours=self.age_hours))]
                         all_tweets = all_tweets.append(tweet_df, ignore_index=True)
                         if all_tweets.shape[0] == 0:
@@ -219,7 +217,6 @@ class TwitterClient(object):
                     else:
                         all_tweets = all_tweets.append(tweet_df, ignore_index=True)
                         
-                print('=>',end='')
                 if break_flag:
                     break    
 
@@ -229,6 +226,7 @@ class TwitterClient(object):
 
                 if tweet_collection_thread_event.is_set():
                     socketio.emit('st_msg',{'text':'Search stopped in between on user request'},namespace='/all')
+                    tweet_collection_thread = None
                     return
                     
             total_tweets = all_tweets.shape[0]
@@ -246,47 +244,14 @@ class TwitterClient(object):
             
             all_tweets = all_tweets.sort_values(by=['tweet_date'],ascending=False)
             
-            print(all_tweets.loc[[0,1,2,3,4],['user_name','user_profile_image','text','tweet_date']])
-            
             socketio.emit('recent_tweets',all_tweets.loc[[0,1,2,3,4],['user_name','user_profile_image','text','user_screen_name']].to_json(orient='records'),namespace='/all')
-            
-            print(' -- recent tweets -- \n\n')
-            print(all_tweets.loc[[0,1,2,3,4],['user_name','user_profile_image','text']].to_json(orient='records'))
-            
-            
-            # influencers = all_tweets.groupby('user_name')['user_name'].count()
-            # influencers = influencers.rename_axis('user_name').reset_index(name='counts')
-            # influencers = influencers.sort_values(by=['counts'],ascending=False).reset_index(drop=True)
 
-            # top_users = []
-                                                
-            # for ind,user in influencers.iloc[[0,1,2,3,4],:].iterrows():
-                # user_dict = {}
-                # for index, row in all_tweets.iterrows():
-                    # if row['user_name'] == user['user_name']:
-                        # user_dict['user_id'] = row['user_id']
-                        # user_dict['user_name'] = row['user_name']
-                        # user_dict['user_screen_name'] = row['user_screen_name']
-                        # user_dict['user_location'] = row['user_location']
-                        # user_dict['user_profile_image'] = row['user_profile_image']
-                        # user_dict['counts'] = user['counts']
-                        # top_users.append(user_dict)
-                        # break
-
-            # socketio.emit('top_users',json.dumps(top_users),namespace='/all')
-            
-            # print(' -- top users -- \n\n')
-            # print(json.dumps(top_users))
-            
             influencers = all_tweets[['user_name','user_profile_image','user_followers_count','user_location','user_screen_name']]
             influencers = influencers.drop_duplicates(['user_name'])
             influencers = influencers.sort_values(by=['user_followers_count'],ascending=False).reset_index(drop=True)
             top_users = influencers.iloc[[0,1,2,3,4]]
             socketio.emit('top_users',top_users.to_json(orient='records'),namespace='/all')
             
-            print(top_users)
-            
-
             
             pos_tweets = all_tweets[all_tweets['sentiment'] == 'positive'].shape[0]
             neg_tweets = all_tweets[all_tweets['sentiment'] == 'negative'].shape[0]
@@ -313,11 +278,10 @@ class TwitterClient(object):
             word_freq_df = pd.DataFrame(list(d.items()), columns=['text','weight'])
             socketio.emit('word_cloud',word_freq_df.to_json(orient='records'),namespace='/all')
             
-            
+            tweet_collection_thread = None
             return
                         
         except tweepy.TweepError as e:
-            # print error (if any)
             print(str(e))
             
     
@@ -341,8 +305,6 @@ def background_thread_simple_count():
 
 def background_tweet_collection():
     global tt_client
-    
-    print(tt_client.search_word)
     tt_client.update_all()
     
             
@@ -401,11 +363,9 @@ def search_word(data):
     with thread_lock:
         if tweet_collection_thread is None:
             tweet_collection_thread = socketio.start_background_task(target=background_tweet_collection)
-            #tweet_collection_thread.join()
-            print('thread started')
-            #tweet_collection_thread = None
+            print('new search thread started')
         else:
-            print('can not get new thread')
+            print('can not get new thread for search')
     
 @socketio.on('stop_request', namespace='/all')
 def all_stop_request():
