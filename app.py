@@ -20,6 +20,22 @@ import tweepy
 import threading
 import time
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+#Variables that contains the user credentials to access Twitter API 
+access_token = config['DEFAULT']['ACCESS_TOKEN']
+access_token_secret = config['DEFAULT']['ACCESS_TOKEN_SECRET']
+consumer_key = config['DEFAULT']['CONSUMER_KEY']
+consumer_secret = config['DEFAULT']['CONSUMER_SECRET']
+
+
+print(consumer_secret)
+
+
+
+
+
 
 thread_lock = Lock()
 simple_count_thread = None
@@ -27,11 +43,7 @@ tweet_collection_thread = None
 tweet_collection_thread_event = threading.Event()
 tweet_count = 0
 
-#Variables that contains the user credentials to access Twitter API 
-access_token = "<use-yors>"
-access_token_secret = "<use-yors>"
-consumer_key = "<use-yors>"
-consumer_secret = "<use-yors>"
+
 
 def tokenize(s):
     return tokens_re.findall(s)
